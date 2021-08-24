@@ -2,7 +2,7 @@ import React from "react";
 import Book from "./Book";
 
 const BooksList = (props) => {
-  const { children, foundBooks, updateBookShelf } = props;
+  const { foundBooks, updateBookShelf } = props;
 
   /* We map over all of the foundBooks, 
   compare the shelf of the books found with all books on Home page,
@@ -30,12 +30,7 @@ const BooksList = (props) => {
 
   return (
     <div className="search-books-results">
-      <div className="bookshelf">
-        <h2 className="bookshelf-title">{children}</h2>
-        <div className="bookshelf-books">
-          <ol className="books-grid">{displayedBooks}</ol>
-        </div>
-      </div>
+      <ol className="books-grid">{displayedBooks}</ol>
     </div>
   );
 };

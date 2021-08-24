@@ -125,6 +125,9 @@ body,
 
 .search-books-results {
   padding: 80px 10px 20px;
+  border-top: 1px solid #02b3e4;
+  width: 90%;
+  margin: 10px auto;
 }
 
 /* books grid */
