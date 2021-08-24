@@ -1,26 +1,39 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import * as BooksAPI from "../BooksAPI";
+import { Link } from "react-router-dom";
+import BooksList from "./BooksList";
 
-export class SearchBooks extends Component {
+class SearchBooks extends Component {
   state = {
     term: "",
-    books: [],
+    foundBooks: [],
   };
 
-  handleInputChange = (e) => {
+  handleTermChange = (e) => {
     this.setState({
       term: e.target.value,
     });
-    this.searchBook(this.state.term);
   };
 
   searchBook = (term) => {
-    this.state.term &&
-      BooksAPI.search(term).then((books) => this.setState(() => ({ books })));
+    if (term) {
+      BooksAPI.search(term).then((foundBooks) => {
+        if (!foundBooks.error) {
+          this.setState(() => ({ foundBooks }));
+        } else {
+          this.setState(() => ({ foundBooks: [] }));
+        }
+      });
+    } else {
+      this.setState(() => ({ foundBooks: [] }));
+    }
   };
 
-
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.term !== this.state.term) {
+      this.searchBook(this.state.term);
+    }
+  }
   render() {
     return (
       <div className="search-books">
@@ -41,13 +54,15 @@ export class SearchBooks extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.state.term}
-              onChange={this.handleInputChange}
+              onChange={this.handleTermChange}
             />
           </div>
         </div>
-        <div className="search-books-results">
-          <ol className="books-grid" />
-        </div>
+        <BooksList
+          foundBooks={this.state.foundBooks}
+          books={this.props.books}
+          updateBookShelf={this.props.updateBookShelf}
+        />
       </div>
     );
   }
