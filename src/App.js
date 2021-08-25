@@ -11,13 +11,12 @@ class BooksApp extends React.Component {
     books: [],
   };
 
-  renderAllBooks = () => {
-    BooksAPI.getAll().then((books) => {
-      this.setState(() => {
-        return {
-          books,
-        };
-      });
+  renderAllBooks = async () => {
+    const books = await BooksAPI.getAll();
+    this.setState(() => {
+      return {
+        books,
+      };
     });
   };
 
@@ -26,11 +25,8 @@ class BooksApp extends React.Component {
   }
 
   updateBookShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf);
-    this.renderAllBooks();
+    BooksAPI.update(book, shelf).then(() => this.renderAllBooks());
   };
-
-  
 
   render() {
     return (
@@ -45,16 +41,13 @@ class BooksApp extends React.Component {
           )}
         />
 
-        <Route
-          path="/"
-          exact
-          render={() => (
-            <Home
-              books={this.state.books}
-              updateBookShelf={this.updateBookShelf}
-            />
-          )}
-        />
+        <Route path="/" exact>
+          {" "}
+          <Home
+            books={this.state.books}
+            updateBookShelf={this.updateBookShelf}
+          />
+        </Route>
       </div>
     );
   }
